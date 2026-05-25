@@ -1,0 +1,10 @@
+# Godot 4+ specific ignores
+.godot/
+.import/
+/android/
+*.gd.uid
+export_presets.cfg
+*.translation
+.DS_Store
+Thumbs.db
+*.gdshader.uid

@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://bsbra4kl6oqv3"]
+
+[ext_resource type="Material" uid="uid://bpc41hu3wb6ub" path="res://assets/materials/checkerboard_floor.tres" id="1_co24e"]
+[ext_resource type="PackedScene" uid="uid://bxka2j5t4ku06" path="res://entities/player.tscn" id="1_qrja6"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_qrja6"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_co24e"]
+size = Vector2(60, 60)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_feb8i"]
+data = PackedVector3Array(30, 0, 30, -30, 0, 30, 30, 0, -30, -30, 0, 30, -30, 0, -30, 30, 0, -30)
+
+[node name="Testing" type="Node3D" unique_id=2064159252]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=210362658]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9341297, 0)
+physics_material_override = SubResource("PhysicsMaterial_qrja6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=1189257993]
+material_override = ExtResource("1_co24e")
+mesh = SubResource("PlaneMesh_co24e")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=335820014]
+shape = SubResource("ConcavePolygonShape3D_feb8i")
+
+[node name="Player" parent="." unique_id=1822498301 instance=ExtResource("1_qrja6")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=680238417]
+transform = Transform3D(1, 0, 0, 0, 0.006667163, 0.99997777, 0, -0.99997777, 0.006667163, 0, 34.690628, 0)
+shadow_enabled = true

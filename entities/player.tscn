@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bxka2j5t4ku06"]
+
+[ext_resource type="Script" uid="uid://bekxo4licsmlm" path="res://entities/player.gd" id="1_merdl"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_merdl"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_e4p34"]
+
+[node name="Player" type="CharacterBody3D" unique_id=1822498301]
+script = ExtResource("1_merdl")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=264284056]
+shape = SubResource("CapsuleShape3D_merdl")
+
+[node name="Body" type="MeshInstance3D" parent="." unique_id=1549199279]
+mesh = SubResource("CapsuleMesh_e4p34")
+
+[node name="Head" type="Node3D" parent="." unique_id=1866740205]
+
+[node name="Camera" type="Camera3D" parent="Head" unique_id=1721300751]
+
+[node name="FootRay" type="RayCast3D" parent="." unique_id=248643834]
+
+[node name="Components" type="Node3D" parent="." unique_id=1348958615]
