@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://bopt4640lffgm"]
+
+[ext_resource type="Script" uid="uid://cdh6nga6005wc" path="res://weapons/weapon_data.gd" id="1_mn5xv"]
+
+[resource]
+script = ExtResource("1_mn5xv")
+name = "Assault Rifle"
+is_automatic = true
+damage = 15.0
+reload_time = 2.0
+spread_angle = 0.8
+recoil_vertical = 0.3
+recoil_horizontal = 0.15
+metadata/_custom_type_script = "uid://cdh6nga6005wc"

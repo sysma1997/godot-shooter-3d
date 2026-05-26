@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera
+@onready var weapon_controller: WeaponController = $Head/WeaponVisual
 
 @export var walk_speed := 5.0
 @export var sprint_speed := 8.0
@@ -27,7 +28,18 @@ func _input(event: InputEvent) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	if event.is_action_pressed("fire"):
+		if not weapon_controller.current_weapon.is_automatic:
+			weapon_controller.fire()
+	if event.is_action_pressed("reload"):
+		weapon_controller.reload()
 
+func _process(delta: float) -> void:
+	if weapon_controller and weapon_controller.current_weapon:
+		if weapon_controller.current_weapon.is_automatic:
+			if Input.is_action_pressed("fire"):
+				weapon_controller.fire()
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= gravity * delta
