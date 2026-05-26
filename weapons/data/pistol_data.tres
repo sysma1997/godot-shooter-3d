@@ -1,17 +1,16 @@
 [gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://svxp71sgi6j"]
 
-[ext_resource type="Script" uid="uid://cdh6nga6005wc" path="res://weapons/weapon_data.gd" id="1_23qtt"]
+[ext_resource type="Script" uid="uid://ddvmdemx2o1l5" path="res://weapons/weapon_data.gd" id="1_23qtt"]
 
 [resource]
 script = ExtResource("1_23qtt")
 name = "Pistol"
-fire_rate = 0.5
+fire_rate = 0.15
 damage = 25.0
 max_range = 50.0
 magazine_size = 12
 total_ammo = 60
 reload_time = 1.2
-spread_angle = 0.3
-recoil_vertical = 0.15
-recoil_horizontal = 0.08
-metadata/_custom_type_script = "uid://cdh6nga6005wc"
+spread_angle = 0.1
+recoil_vertical = 0.8
+recoil_horizontal = 0.2

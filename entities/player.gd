@@ -30,8 +30,7 @@ func _input(event: InputEvent) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 	if event.is_action_pressed("fire"):
-		if not weapon_controller.current_weapon.is_automatic:
-			weapon_controller.fire()
+		weapon_controller.fire()
 	if event.is_action_pressed("reload"):
 		weapon_controller.reload()
 
@@ -40,6 +39,14 @@ func _process(delta: float) -> void:
 		if weapon_controller.current_weapon.is_automatic:
 			if Input.is_action_pressed("fire"):
 				weapon_controller.fire()
+				# Disparo continuo sin esperar al timer visual
+				while weapon_controller.fire_timer <= 0 and Input.is_action_pressed("fire"):
+					if weapon_controller.current_magazine_ammo > 0:
+						weapon_controller.fire()
+					else:
+						break
+					# Pequeña pausa entre disparos automaticos
+					await get_tree().create_timer(weapon_controller.current_weapon.fire_rate * 0.5).timeout
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= gravity * delta

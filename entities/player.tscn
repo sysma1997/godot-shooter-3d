@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bxka2j5t4ku06"]
 
-[ext_resource type="Script" uid="uid://bkidy6c1n1wcr" path="res://entities/player.gd" id="1_merdl"]
+[ext_resource type="Script" uid="uid://bekxo4licsmlm" path="res://entities/player.gd" id="1_merdl"]
 [ext_resource type="PackedScene" uid="uid://dlh2fr4nbpycr" path="res://weapons/weapon_visual.tscn" id="2_e4p34"]
 [ext_resource type="Resource" uid="uid://svxp71sgi6j" path="res://weapons/data/pistol_data.tres" id="3_rfe5m"]
 
