@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bxka2j5t4ku06"]
 
-[ext_resource type="Script" uid="uid://bekxo4licsmlm" path="res://entities/player.gd" id="1_merdl"]
+[ext_resource type="Script" uid="uid://bkidy6c1n1wcr" path="res://entities/player.gd" id="1_merdl"]
 [ext_resource type="PackedScene" uid="uid://dlh2fr4nbpycr" path="res://weapons/weapon_visual.tscn" id="2_e4p34"]
-[ext_resource type="Resource" uid="uid://svxp71sgi6j" path="res://weapons/data/pistol_data.tres" id="3_rfe5m"]
+[ext_resource type="Resource" uid="uid://bopt4640lffgm" path="res://weapons/data/rifle_data.tres" id="3_e4p34"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_merdl"]
 
@@ -23,7 +23,7 @@ mesh = SubResource("CapsuleMesh_e4p34")
 
 [node name="WeaponVisual" parent="Head" unique_id=1289547587 instance=ExtResource("2_e4p34")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.2, -0.4)
-current_weapon = ExtResource("3_rfe5m")
+current_weapon = ExtResource("3_e4p34")
 
 [node name="FootRay" type="RayCast3D" parent="." unique_id=248643834]
 

@@ -17,7 +17,11 @@ var current_total_ammo: int
 var can_fire: bool = true
 var is_reloading: bool = false
 var fire_timer: float = 0.0
-var current_recoil: float = 0.0
+
+var current_recoil_x: float = 0.0
+var current_recoil_y: float = 0.0
+var recoil_recovery_speed: float = 5.0
+var is_firing: bool = false
 
 func _ready() -> void:
 	if current_weapon:
@@ -31,6 +35,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if fire_timer > 0:
 		fire_timer -= delta
+	
+	if not is_firing and not is_reloading:
+		_recover_recoil(delta)
 
 func initialize_weapon(weapon: WeaponData) -> void:
 	current_weapon = weapon
@@ -47,6 +54,8 @@ func fire() -> void:
 	if current_magazine_ammo <= 0:
 		reload()
 		return
+	
+	is_firing = true
 	
 	current_magazine_ammo -= 1
 	fire_timer = current_weapon.fire_rate
@@ -65,6 +74,11 @@ func fire() -> void:
 	if current_magazine_ammo <= 0 and current_total_ammo > 0:
 		# Pequeño delay para que no recargue instantaneamente
 		get_tree().create_timer(0.2).timeout.connect(reload)
+	
+	# Resetea is_firing despues de un momento
+	if not current_weapon.is_automatic:
+		await get_tree().create_timer(0.1).timeout
+		is_firing = false
 
 func _perform_raycast() -> void:
 	var space_state = get_world_3d().direct_space_state
@@ -132,25 +146,27 @@ func _show_muzzle_flash() -> void:
 func _apply_recoil() -> void:
 	# Recoil mas notorio
 	var camera = get_viewport().get_camera_3d()
-	if not camera:
-		return
+	if not camera: return
 	
-	current_recoil += current_weapon.recoil_vertical * 0.5
-	var original_rotation = camera.rotation
-	camera.rotation.x += deg_to_rad(current_recoil * 2.0)
-	camera.rotation.y += deg_to_rad(randf_range(
-		-current_weapon.recoil_horizontal, 
-		current_weapon.recoil_horizontal) * 2.0
-	)
-	current_recoil = clamp(current_recoil, 0.0, 3.0)
-	var tween = create_tween()
-	tween.set_ease((Tween.EASE_OUT))
-	tween.set_trans(Tween.TRANS_QUAD)
-	tween.tween_property(camera, "rotation:x", original_rotation.x, 0.15)
-	tween.parallel().tween_property(camera, "rotation:y", original_rotation.y, 0.15)
-	
-	var tween_recoil = create_tween()
-	tween_recoil.tween_property(self, "current_recoil", 0.0, 0.2)
+	# Acumular retroceso
+	# Cada disparo suma mas retroceso
+	var recoil_vertical = current_weapon.recoil_vertical * 0.08
+	var recoil_horizontal = current_weapon.recoil_horizontal * 0.08
+	# Si es automatica y se mantiene precionado, el retroceso crece mas
+	if current_weapon.is_automatic:
+		# Cuando mas dispara, mas sube
+		var spray_factor = 1.0 + (current_recoil_x * 0.5)
+		recoil_vertical *= spray_factor
+		recoil_horizontal *= spray_factor * 1.2 # Mas dispersion lateral con el tiempo
+	# Acumular en los acumuladores
+	current_recoil_x += recoil_vertical
+	current_recoil_y += randf_range(-recoil_horizontal, recoil_horizontal)
+	# Limitar el maximo para que no sea injugable
+	current_recoil_x = clamp(current_recoil_x, 0.0, 8.0)
+	current_recoil_y = clamp(current_recoil_y, -5.0, 5.0)
+	# Aplicar rotacion instantanea a la camara
+	camera.rotation.x += deg_to_rad(recoil_vertical * 3.0)
+	camera.rotation.y += deg_to_rad(randf_range(-recoil_horizontal, recoil_horizontal) * 3.0)
 func _apply_weapon_kickback() -> void:
 	var kick_direction = Vector3(randf_range(-0.01, 0.01), 0.015, 0.04)
 	position += kick_direction
@@ -159,3 +175,12 @@ func _apply_weapon_kickback() -> void:
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_BACK)
 	tween.tween_property(self, "position", position - kick_direction, 0.12)
+func _recover_recoil(delta: float) -> void:
+	var camera = get_viewport().get_camera_3d()
+	if not camera: return
+	# Reducir acumuladores gradualmente
+	current_recoil_x = move_toward(current_recoil_x, 0.0, recoil_recovery_speed * delta)
+	current_recoil_y = move_toward(current_recoil_y, 0.0, recoil_recovery_speed * delta)
+	# Recuperar rotacion de camara suave
+	camera.rotation.x = move_toward(camera.rotation.x, 0.0, 3.0 * delta)
+	camera.rotation.y = move_toward(camera.rotation.y, 0.0, 3.0 * delta)

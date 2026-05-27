@@ -3,7 +3,7 @@ shader_type spatial;
 uniform vec4 color1 : source_color = vec4(0.8, 0.8, 0.8, 1.0);
 uniform vec4 color2 : source_color = vec4(0.2, 0.2, 0.2, 1.0);
 uniform float square_size = 1.0;
-uniform float plane_scale = 10.0; // El tamaño de tu plane mesh
+uniform float plane_scale = 15.0; // El tamaño de tu plane mesh
 
 void fragment() {
     // Escalamos las UVs según el tamaño del plano

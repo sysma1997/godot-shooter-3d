@@ -30,10 +30,14 @@ func _input(event: InputEvent) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 	if event.is_action_pressed("fire"):
-		weapon_controller.fire()
+		if weapon_controller and weapon_controller.current_weapon:
+			if not weapon_controller.current_weapon.is_automatic:
+				weapon_controller.fire()
+	if event.is_action_released("fire"):
+		if weapon_controller:
+			weapon_controller.is_firing = false
 	if event.is_action_pressed("reload"):
 		weapon_controller.reload()
-
 func _process(delta: float) -> void:
 	if weapon_controller and weapon_controller.current_weapon:
 		if weapon_controller.current_weapon.is_automatic:
